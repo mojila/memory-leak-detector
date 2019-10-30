@@ -1,0 +1,14 @@
+{
+    "manifest_version": 2,
+    "name": "Memory Leak Detector",
+    "version": "0.1",
+    "permissions": ["notifications", "system.memory"],
+    "content_scripts": [
+        {
+            "matches": [
+                "<all_urls>"
+            ],
+            "js": ["sizeof.compressed.js", "content.js"]
+        }
+    ]
+}
