@@ -31,7 +31,9 @@
   "content_scripts": [
     {
       "matches": [
-        "https://www.google.com/*"
+        "https://www.google.com/*",
+        "http://localhost/*",
+        "http://localhost:*/*"
       ],
       "css": [
         "src/inject/inject.css"
@@ -39,7 +41,9 @@
     },
     {
       "matches": [
-        "https://www.google.com/*"
+        "https://www.google.com/*",
+        "http://localhost/*",
+        "http://localhost:*/*"
       ],
       "js": [
         "src/inject/inject.js"
