@@ -10,7 +10,7 @@ function Header() {
             <Pane flex={1} alignItems="center" display="flex">
                 <Heading size={500}>
                     <Icon icon={active ? 'tick-circle':'stop'} color={active ? 'success':'danger'}/> 
-                    &nbsp; { active ? 'Detector Activated':'Detector Deactivated' }
+                    { active ? ' Detector Activated':' Detector Deactivated' }
                 </Heading>
             </Pane>
             <Pane>
