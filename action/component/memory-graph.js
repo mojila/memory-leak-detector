@@ -14,13 +14,10 @@ const commonProperties = {
 
 const MemoryGraph = () => {
     const date = new Date();
-    date.setMinutes(0);
-    date.setSeconds(0);
-    date.setMilliseconds(0);
 
-    const [dataA, setDataA] = useState(range(15).map(i => ({
-        x: time.timeMinute.offset(date, i * 30),
-        y: 10 + Math.round(Math.random() * 50),
+    const [dataA, setDataA] = useState(range(10).map(i => ({
+        x: time.timeSecond.offset(date, i),
+        y: 10 + Math.round(Math.random() * 50)
     })));
     
     useEffect(() => {
@@ -32,8 +29,8 @@ const MemoryGraph = () => {
     const next = () => {
         let data = dataA.slice(1);
         data.push({
-          x: time.timeMinute.offset(last(dataA).x, 30),
-          y: 10 + Math.round(Math.random() * 55),
+          x: time.timeSecond.offset(last(dataA).x, 1),
+          y: 10 + Math.round(Math.random() * 55)
         });
 
         setDataA(data);
@@ -49,7 +46,6 @@ const MemoryGraph = () => {
                 yScale={{ type: 'linear', max: 100 }}
                 axisBottom={{
                     format: '%H:%M:%S',
-                    tickValues: 'every 1 hours',
                     legend: `Memory Used Graph`,
                     legendPosition: 'middle',
                     legendOffset: 46,
