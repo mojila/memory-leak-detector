@@ -22,7 +22,6 @@
   },
   "permissions": [
     "contentSettings",
-    "fileBrowserHandler",
     "tts",
     "ttsEngine",
     "idle",
@@ -31,7 +30,8 @@
   "content_scripts": [
     {
       "matches": [
-        "https://www.google.com/*"
+        "https://www.google.com/*",
+        "http://localhost:*/*"
       ],
       "css": [
         "src/inject/inject.css"
