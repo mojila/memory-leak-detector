@@ -27,11 +27,9 @@
     },
     "permissions": [
         "activeTab",
-        "pageCapture",
         "notifications",
-        "debugger",
-        "background",
         "tabs",
+        "storage",
         "<all_urls>"
     ],
     "devtools_page": "devtools/devtools-page.html"

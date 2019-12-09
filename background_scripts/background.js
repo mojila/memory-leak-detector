@@ -1,3 +1,1 @@
-(function() {
-    console.log('Halo');
-})
+console.log('this is background script');

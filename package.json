@@ -1,0 +1,29 @@
+{
+  "name": "memory-leak-detector",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "panel-dev": "parcel src/panel/index.html",
+    "panel-build": "parcel build src/panel/index.html --public-url ./ --out-dir devtools/panel"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mojila/memory-leak-detector.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mojila/memory-leak-detector/issues"
+  },
+  "homepage": ".",
+  "devDependencies": {
+    "parcel-bundler": "^1.12.4"
+  },
+  "dependencies": {
+    "evergreen-ui": "^4.21.5",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  }
+}
