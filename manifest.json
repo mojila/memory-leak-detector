@@ -1,0 +1,38 @@
+{
+    "name": "Memory Leak Detector",
+    "short_name": "Meleak",
+    "version": "1.0.0",
+    "author": "Mojila",
+    "manifest_version": 2,
+    "background": {
+        "scripts": ["background_scripts/background.js"]
+    },
+    "browser_action": {
+        "browser_style": true,
+        "default_icon": {
+          "16": "button/memory-leak-detector-16.png",
+          "32": "button/memory-leak-detector-32.png"
+        },
+        "default_title": "Memory Leak Detector",
+        "default_popup": "popup/memory-leak-detector.html",
+        "theme_icons": [{
+          "light": "icons/memory-leak-detector-16.png",
+          "dark": "icons/memory-leak-detector-16.png",
+          "size": 16
+        }, {
+          "light": "icons/memory-leak-detector-32.png",
+          "dark": "icons/memory-leak-detector-32.png",
+          "size": 32
+        }]
+    },
+    "permissions": [
+        "activeTab",
+        "pageCapture",
+        "notifications",
+        "debugger",
+        "background",
+        "tabs",
+        "<all_urls>"
+    ],
+    "devtools_page": "devtools/devtools-page.html"
+}
