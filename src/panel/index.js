@@ -1,12 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Button } from 'evergreen-ui';
+import { Pane, Text } from 'evergreen-ui';
 
 const App = (props) => {
-    return (<div>
-        <p>Adaw bray test</p>
-        <Button>Hello</Button>
-    </div>);
+    return (<Pane>
+        <Pane margin={16}>
+            <Text>Hello</Text>
+        </Pane>
+    </Pane>);
 };
 
 ReactDOM.render(<App/>, document.getElementById('app'));
