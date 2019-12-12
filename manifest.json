@@ -7,6 +7,7 @@
     "background": {
         "scripts": ["background_scripts/background.js"]
     },
+    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
     "browser_action": {
         "browser_style": true,
         "default_icon": {
@@ -30,7 +31,9 @@
         "notifications",
         "tabs",
         "storage",
-        "<all_urls>"
+        "file:///*",
+        "http://*/*",
+        "https://*/*"
     ],
     "devtools_page": "devtools/devtools-page.html"
 }

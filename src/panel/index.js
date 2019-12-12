@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import { Pane, Text } from 'evergreen-ui';
+import { Pane } from 'evergreen-ui';
+import MemoryHeapChart from './components/memory_heap_chart';
 
 const App = (props) => {
     return (<Pane>
         <Pane margin={16}>
-            <Text>Hello</Text>
+            <MemoryHeapChart/>
         </Pane>
     </Pane>);
 };
