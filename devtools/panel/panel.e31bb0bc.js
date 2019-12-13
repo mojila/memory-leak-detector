@@ -75174,7 +75174,7 @@ function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) ||
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 function MemoryHeapChart(props) {
-  var _useState = (0, _react.useState)({
+  var options = {
     chart: {
       id: 'memory-usage'
     },
@@ -75190,36 +75190,41 @@ function MemoryHeapChart(props) {
         left: 16
       }
     },
-    title: {
-      text: 'Memory Usage',
-      align: 'left'
-    },
     xaxis: {
       type: 'numeric'
     }
-  }),
+  };
+  var chartType = [{
+    label: 'Line',
+    value: 'line'
+  }, {
+    label: 'Scatter',
+    value: 'scatter'
+  }];
+
+  var _useState = (0, _react.useState)(performance.memory.usedJSHeapSize),
       _useState2 = _slicedToArray(_useState, 2),
-      options = _useState2[0],
-      setOptions = _useState2[1];
+      usedMemory = _useState2[0],
+      setUsedMemory = _useState2[1];
 
-  var _useState3 = (0, _react.useState)(performance.memory.usedJSHeapSize),
+  var _useState3 = (0, _react.useState)(performance.memory.totalJSHeapSize),
       _useState4 = _slicedToArray(_useState3, 2),
-      usedMemory = _useState4[0],
-      setUsedMemory = _useState4[1];
+      totalMemory = _useState4[0],
+      setTotalMemory = _useState4[1];
 
-  var _useState5 = (0, _react.useState)(performance.memory.totalJSHeapSize),
+  var _useState5 = (0, _react.useState)('line'),
       _useState6 = _slicedToArray(_useState5, 2),
-      totalMemory = _useState6[0],
-      setTotalMemory = _useState6[1];
+      selectedChartType = _useState6[0],
+      setSelectedChartType = _useState6[1];
 
   var _useState7 = (0, _react.useState)([{
-    name: 'Memory Heap',
+    name: 'Memory Used',
     data: [{
       x: (0, _moment.default)().format('HH:mm:ss'),
       y: performance.memory.usedJSHeapSize
     }]
   }, {
-    name: 'Memory Total',
+    name: 'Memory Heap Total',
     data: [{
       x: (0, _moment.default)().format('HH:mm:ss'),
       y: performance.memory.totalJSHeapSize
@@ -75263,12 +75268,27 @@ function MemoryHeapChart(props) {
     padding: 8,
     borderRadius: 4,
     elevation: 1
-  }, _react.default.createElement(_reactApexcharts.default, {
+  }, _react.default.createElement(_evergreenUi.Pane, null, _react.default.createElement(_evergreenUi.Pane, {
+    padding: 8
+  }, _react.default.createElement(_evergreenUi.SegmentedControl, {
+    name: "Type",
+    height: 24,
+    options: chartType,
+    value: selectedChartType,
+    onChange: function onChange(value) {
+      return setSelectedChartType(value);
+    }
+  })), _react.default.createElement(_evergreenUi.Pane, null, selectedChartType === 'line' && _react.default.createElement(_reactApexcharts.default, {
     options: options,
     series: series,
-    type: "line",
-    height: "240"
-  })), _react.default.createElement(_evergreenUi.Pane, {
+    type: selectedChartType,
+    height: "220"
+  }), selectedChartType === 'scatter' && _react.default.createElement(_reactApexcharts.default, {
+    options: options,
+    series: series,
+    type: selectedChartType,
+    height: "220"
+  })))), _react.default.createElement(_evergreenUi.Pane, {
     flex: 1,
     background: "overlay",
     marginLeft: 16,
