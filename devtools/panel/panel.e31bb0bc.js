@@ -75081,7 +75081,134 @@ var global = arguments[3];
 
 })));
 
-},{}],"components/current_memory_stats.js":[function(require,module,exports) {
+},{}],"components/memory_heap_chart.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = MemoryHeapChart;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _reactApexcharts = _interopRequireDefault(require("react-apexcharts"));
+
+var _evergreenUi = require("evergreen-ui");
+
+var _moment = _interopRequireDefault(require("moment"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function MemoryHeapChart(props) {
+  var options = {
+    chart: {
+      id: 'memory-usage'
+    },
+    dataLabels: {
+      enabled: false
+    },
+    stroke: {
+      curve: 'straight'
+    },
+    grid: {
+      padding: {
+        right: 8,
+        left: 16
+      }
+    },
+    xaxis: {
+      type: 'numeric'
+    }
+  };
+  var chartType = [{
+    label: 'Line',
+    value: 'line'
+  }, {
+    label: 'Scatter',
+    value: 'scatter'
+  }];
+
+  var _useState = (0, _react.useState)('line'),
+      _useState2 = _slicedToArray(_useState, 2),
+      selectedChartType = _useState2[0],
+      setSelectedChartType = _useState2[1];
+
+  var _useState3 = (0, _react.useState)([{
+    name: 'Memory Used',
+    data: [{
+      x: (0, _moment.default)().format('HH:mm:ss'),
+      y: performance.memory.usedJSHeapSize
+    }]
+  }, {
+    name: 'Memory Heap Total',
+    data: [{
+      x: (0, _moment.default)().format('HH:mm:ss'),
+      y: performance.memory.totalJSHeapSize
+    }]
+  }]),
+      _useState4 = _slicedToArray(_useState3, 2),
+      series = _useState4[0],
+      setSeries = _useState4[1];
+
+  (0, _react.useEffect)(function () {
+    var updateSeries = setInterval(function () {
+      var newSeries = series;
+
+      if (newSeries[0].data.length > 9) {
+        newSeries[0].data = newSeries[0].data.slice(1);
+        newSeries[1].data = newSeries[1].data.slice(1);
+      }
+
+      newSeries[0].data.push({
+        x: (0, _moment.default)().format('HH:mm:ss'),
+        y: performance.memory.usedJSHeapSize
+      });
+      newSeries[1].data.push({
+        x: (0, _moment.default)().format('HH:mm:ss'),
+        y: performance.memory.totalJSHeapSize
+      });
+      setSeries(newSeries);
+      ApexCharts.exec('memory-usage', 'updateSeries', newSeries);
+    }, 1000);
+    return function () {
+      return clearInterval(updateSeries);
+    };
+  }, [setSeries]);
+  return _react.default.createElement(_evergreenUi.Pane, null, _react.default.createElement(_evergreenUi.Pane, {
+    padding: 8
+  }, _react.default.createElement(_evergreenUi.SegmentedControl, {
+    name: "Type",
+    height: 24,
+    options: chartType,
+    value: selectedChartType,
+    onChange: function onChange(value) {
+      return setSelectedChartType(value);
+    }
+  })), _react.default.createElement(_evergreenUi.Pane, null, selectedChartType === 'line' && _react.default.createElement(_reactApexcharts.default, {
+    options: options,
+    series: series,
+    type: selectedChartType,
+    height: "200"
+  }), selectedChartType === 'scatter' && _react.default.createElement(_reactApexcharts.default, {
+    options: options,
+    series: series,
+    type: selectedChartType,
+    height: "200"
+  })));
+}
+},{"react":"../../node_modules/react/index.js","react-apexcharts":"../../node_modules/react-apexcharts/dist/react-apexcharts.min.js","evergreen-ui":"../../node_modules/evergreen-ui/esm/index.js","moment":"../../node_modules/moment/moment.js"}],"components/current_memory_stats.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -75122,14 +75249,45 @@ function CurrentMemoryStats(props) {
       selectedOption = _useState2[0],
       setSelectedOption = _useState2[1];
 
+  var _useState3 = (0, _react.useState)(performance.memory.usedJSHeapSize),
+      _useState4 = _slicedToArray(_useState3, 2),
+      usedMemory = _useState4[0],
+      setUsedMemory = _useState4[1];
+
+  var _useState5 = (0, _react.useState)(performance.memory.totalJSHeapSize),
+      _useState6 = _slicedToArray(_useState5, 2),
+      totalMemory = _useState6[0],
+      setTotalMemory = _useState6[1];
+
+  (0, _react.useEffect)(function () {
+    var updateSeries = setInterval(function () {
+      setUsedMemory(performance.memory.usedJSHeapSize);
+      setTotalMemory(performance.memory.totalJSHeapSize);
+    }, 1000);
+    return function () {
+      return clearInterval(updateSeries);
+    };
+  }, [setTotalMemory, setUsedMemory]);
   return _react.default.createElement(_evergreenUi.Pane, {
-    width: 280,
+    width: 260,
     background: "tint1",
     padding: 8,
     paddingRight: 16,
     paddingLeft: 16,
-    borderRadius: 4
-  }, _react.default.createElement(_evergreenUi.Pane, null, _react.default.createElement(_evergreenUi.SegmentedControl, {
+    borderRadius: 4,
+    flex: 1
+  }, _react.default.createElement(_evergreenUi.Pane, {
+    display: "flex",
+    marginBottom: 8
+  }, _react.default.createElement(_evergreenUi.Button, {
+    flex: 1,
+    justifyContent: "center",
+    height: 24,
+    iconBefore: "chart",
+    disabled: true
+  }, "Current Memory Heap")), _react.default.createElement(_evergreenUi.Pane, {
+    justifyContent: "space-between"
+  }, _react.default.createElement(_evergreenUi.SegmentedControl, {
     name: "Unit",
     height: 24,
     options: options,
@@ -75139,179 +75297,91 @@ function CurrentMemoryStats(props) {
     }
   })), _react.default.createElement(_evergreenUi.Pane, {
     marginTop: 8
-  }, _react.default.createElement(_evergreenUi.Text, null, "Current Memory Used: ", (props.usedMemory / (selectedOption === 'b' ? 1 : selectedOption === 'kb' ? 1000 : 1000000)).toFixed(1), " ", selectedOption.toUpperCase())), _react.default.createElement(_evergreenUi.Pane, null, _react.default.createElement(_evergreenUi.Text, null, "Current Memory Total: ", (props.totalMemory / (selectedOption === 'b' ? 1 : selectedOption === 'kb' ? 1000 : 1000000)).toFixed(1), " ", selectedOption.toUpperCase())));
+  }, _react.default.createElement(_evergreenUi.Text, null, "Memory Used: ", (usedMemory / (selectedOption === 'b' ? 1 : selectedOption === 'kb' ? 1000 : 1000000)).toFixed(1), " ", selectedOption.toUpperCase())), _react.default.createElement(_evergreenUi.Pane, null, _react.default.createElement(_evergreenUi.Text, null, "Heap Total: ", (totalMemory / (selectedOption === 'b' ? 1 : selectedOption === 'kb' ? 1000 : 1000000)).toFixed(1), " ", selectedOption.toUpperCase())));
 }
-},{"react":"../../node_modules/react/index.js","evergreen-ui":"../../node_modules/evergreen-ui/esm/index.js"}],"components/memory_heap_chart.js":[function(require,module,exports) {
+},{"react":"../../node_modules/react/index.js","evergreen-ui":"../../node_modules/evergreen-ui/esm/index.js"}],"components/memory_leak_count.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = MemoryHeapChart;
+exports.default = MemoryLeakCount;
 
-var _react = _interopRequireWildcard(require("react"));
-
-var _reactApexcharts = _interopRequireDefault(require("react-apexcharts"));
+var _react = _interopRequireDefault(require("react"));
 
 var _evergreenUi = require("evergreen-ui");
 
-var _moment = _interopRequireDefault(require("moment"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var _current_memory_stats = _interopRequireDefault(require("./current_memory_stats"));
+function MemoryLeakCount(props) {
+  return _react.default.createElement(_evergreenUi.Pane, {
+    width: 260,
+    background: "tint1",
+    padding: 8,
+    paddingRight: 16,
+    paddingLeft: 16,
+    borderRadius: 4,
+    marginLeft: 8
+  }, _react.default.createElement(_evergreenUi.Pane, {
+    display: "flex"
+  }, _react.default.createElement(_evergreenUi.Button, {
+    justifyContent: "center",
+    disabled: true,
+    flex: 1,
+    height: 24
+  }, "Memory Leak Detected")), _react.default.createElement(_evergreenUi.Pane, {
+    display: "flex",
+    justifyContent: "center",
+    marginTop: 16
+  }, _react.default.createElement(_evergreenUi.Heading, {
+    size: 800
+  }, 0)));
+}
+},{"react":"../../node_modules/react/index.js","evergreen-ui":"../../node_modules/evergreen-ui/esm/index.js"}],"components/last_memory_leak.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = LastMemoryLeak;
+
+var _react = _interopRequireDefault(require("react"));
+
+var _evergreenUi = require("evergreen-ui");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
-
-function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-function MemoryHeapChart(props) {
-  var options = {
-    chart: {
-      id: 'memory-usage'
-    },
-    dataLabels: {
-      enabled: false
-    },
-    stroke: {
-      curve: 'straight'
-    },
-    grid: {
-      padding: {
-        right: 0,
-        left: 16
-      }
-    },
-    xaxis: {
-      type: 'numeric'
-    }
-  };
-  var chartType = [{
-    label: 'Line',
-    value: 'line'
-  }, {
-    label: 'Scatter',
-    value: 'scatter'
-  }];
-
-  var _useState = (0, _react.useState)(performance.memory.usedJSHeapSize),
-      _useState2 = _slicedToArray(_useState, 2),
-      usedMemory = _useState2[0],
-      setUsedMemory = _useState2[1];
-
-  var _useState3 = (0, _react.useState)(performance.memory.totalJSHeapSize),
-      _useState4 = _slicedToArray(_useState3, 2),
-      totalMemory = _useState4[0],
-      setTotalMemory = _useState4[1];
-
-  var _useState5 = (0, _react.useState)('line'),
-      _useState6 = _slicedToArray(_useState5, 2),
-      selectedChartType = _useState6[0],
-      setSelectedChartType = _useState6[1];
-
-  var _useState7 = (0, _react.useState)([{
-    name: 'Memory Used',
-    data: [{
-      x: (0, _moment.default)().format('HH:mm:ss'),
-      y: performance.memory.usedJSHeapSize
-    }]
-  }, {
-    name: 'Memory Heap Total',
-    data: [{
-      x: (0, _moment.default)().format('HH:mm:ss'),
-      y: performance.memory.totalJSHeapSize
-    }]
-  }]),
-      _useState8 = _slicedToArray(_useState7, 2),
-      series = _useState8[0],
-      setSeries = _useState8[1];
-
-  (0, _react.useEffect)(function () {
-    var updateSeries = setInterval(function () {
-      var newSeries = series;
-
-      if (newSeries[0].data.length > 9) {
-        newSeries[0].data = newSeries[0].data.slice(1);
-        newSeries[1].data = newSeries[1].data.slice(1);
-      }
-
-      newSeries[0].data.push({
-        x: (0, _moment.default)().format('HH:mm:ss'),
-        y: performance.memory.usedJSHeapSize
-      });
-      newSeries[1].data.push({
-        x: (0, _moment.default)().format('HH:mm:ss'),
-        y: performance.memory.totalJSHeapSize
-      });
-      setSeries(newSeries);
-      setUsedMemory(performance.memory.usedJSHeapSize);
-      setTotalMemory(performance.memory.totalJSHeapSize);
-      ApexCharts.exec('memory-usage', 'updateSeries', newSeries);
-    }, 1000);
-    return function () {
-      return updateSeries();
-    };
-  }, [setSeries]);
-  return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement(_evergreenUi.Pane, {
-    display: "flex"
-  }, _react.default.createElement(_evergreenUi.Pane, {
-    flex: 1,
-    background: "tint2",
+function LastMemoryLeak(props) {
+  return _react.default.createElement(_evergreenUi.Pane, {
+    background: "tint1",
     padding: 8,
-    borderRadius: 4,
-    elevation: 1
-  }, _react.default.createElement(_evergreenUi.Pane, null, _react.default.createElement(_evergreenUi.Pane, {
-    padding: 8
-  }, _react.default.createElement(_evergreenUi.SegmentedControl, {
-    name: "Type",
-    height: 24,
-    options: chartType,
-    value: selectedChartType,
-    onChange: function onChange(value) {
-      return setSelectedChartType(value);
-    }
-  })), _react.default.createElement(_evergreenUi.Pane, null, selectedChartType === 'line' && _react.default.createElement(_reactApexcharts.default, {
-    options: options,
-    series: series,
-    type: selectedChartType,
-    height: "220"
-  }), selectedChartType === 'scatter' && _react.default.createElement(_reactApexcharts.default, {
-    options: options,
-    series: series,
-    type: selectedChartType,
-    height: "220"
-  })))), _react.default.createElement(_evergreenUi.Pane, {
-    flex: 1,
-    background: "overlay",
-    marginLeft: 16,
-    borderRadius: 4,
-    padding: 8,
-    elevation: 1
+    marginTop: 8,
+    borderRadius: 4
   }, _react.default.createElement(_evergreenUi.Pane, {
     display: "flex"
-  }, _react.default.createElement(_current_memory_stats.default, {
-    usedMemory: usedMemory,
-    totalMemory: totalMemory
-  })), _react.default.createElement(_evergreenUi.Pane, {
+  }, _react.default.createElement(_evergreenUi.Button, {
+    justifyContent: "center",
+    disabled: true,
     flex: 1,
+    height: 24
+  }, "Last Memory Leak Detected")), _react.default.createElement(_evergreenUi.Pane, {
     display: "flex"
-  }, _react.default.createElement(_evergreenUi.Pane, {
-    flex: 1,
-    padding: 8
-  })))));
+  }, _react.default.createElement(_evergreenUi.Table, {
+    flex: 1
+  }, _react.default.createElement(_evergreenUi.Table.Head, null, _react.default.createElement(_evergreenUi.Table.TextHeaderCell, null, "Time"), _react.default.createElement(_evergreenUi.Table.TextHeaderCell, null, "Memory Used"), _react.default.createElement(_evergreenUi.Table.TextHeaderCell, null, "Memory Heap Total"), _react.default.createElement(_evergreenUi.Table.TextHeaderCell, null, "Object")), _react.default.createElement(_evergreenUi.Table.Body, {
+    height: 24
+  }))), _react.default.createElement(_evergreenUi.Pane, {
+    display: "flex"
+  }, _react.default.createElement(_evergreenUi.Button, {
+    height: 32,
+    justifyContent: "center",
+    flex: 1
+  }, "Show All")));
 }
-},{"react":"../../node_modules/react/index.js","react-apexcharts":"../../node_modules/react-apexcharts/dist/react-apexcharts.min.js","evergreen-ui":"../../node_modules/evergreen-ui/esm/index.js","moment":"../../node_modules/moment/moment.js","./current_memory_stats":"components/current_memory_stats.js"}],"index.js":[function(require,module,exports) {
+},{"react":"../../node_modules/react/index.js","evergreen-ui":"../../node_modules/evergreen-ui/esm/index.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
-var _react = _interopRequireWildcard(require("react"));
+var _react = _interopRequireDefault(require("react"));
 
 var _reactDom = _interopRequireDefault(require("react-dom"));
 
@@ -75319,20 +75389,37 @@ var _evergreenUi = require("evergreen-ui");
 
 var _memory_heap_chart = _interopRequireDefault(require("./components/memory_heap_chart"));
 
+var _current_memory_stats = _interopRequireDefault(require("./components/current_memory_stats"));
+
+var _memory_leak_count = _interopRequireDefault(require("./components/memory_leak_count"));
+
+var _last_memory_leak = _interopRequireDefault(require("./components/last_memory_leak"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 var App = function App(props) {
-  return _react.default.createElement(_evergreenUi.Pane, null, _react.default.createElement(_evergreenUi.Pane, {
-    margin: 16
-  }, _react.default.createElement(_memory_heap_chart.default, null)));
+  return _react.default.createElement(_evergreenUi.Pane, {
+    display: "flex"
+  }, _react.default.createElement(_evergreenUi.Pane, {
+    flex: 1,
+    background: "tint2",
+    padding: 8,
+    borderRadius: 4,
+    elevation: 1,
+    marginRight: 16
+  }, _react.default.createElement(_memory_heap_chart.default, null)), _react.default.createElement(_evergreenUi.Pane, {
+    flex: 1,
+    background: "overlay",
+    borderRadius: 4,
+    padding: 8,
+    elevation: 1
+  }, _react.default.createElement(_evergreenUi.Pane, {
+    display: "flex"
+  }, _react.default.createElement(_current_memory_stats.default, null), _react.default.createElement(_memory_leak_count.default, null)), _react.default.createElement(_evergreenUi.Pane, null, _react.default.createElement(_last_memory_leak.default, null))));
 };
 
 _reactDom.default.render(_react.default.createElement(App, null), document.getElementById('app'));
-},{"react":"../../node_modules/react/index.js","react-dom":"../../node_modules/react-dom/index.js","evergreen-ui":"../../node_modules/evergreen-ui/esm/index.js","./components/memory_heap_chart":"components/memory_heap_chart.js"}],"../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"react":"../../node_modules/react/index.js","react-dom":"../../node_modules/react-dom/index.js","evergreen-ui":"../../node_modules/evergreen-ui/esm/index.js","./components/memory_heap_chart":"components/memory_heap_chart.js","./components/current_memory_stats":"components/current_memory_stats.js","./components/memory_leak_count":"components/memory_leak_count.js","./components/last_memory_leak":"components/last_memory_leak.js"}],"../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -75360,7 +75447,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56095" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63130" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
