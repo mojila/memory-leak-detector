@@ -1,19 +1,13 @@
 import React from 'react';
-import MemoryGraph from './memory-graph';
-import { Context } from '../context';
 import { Text, Pane } from 'evergreen-ui';
+import MemoryHeapChart from '../../panel/components/memory_heap_chart';
+import SimpleCurrentStats from './simple-current-stats';
 
 function Main() {
-    const { active } = Context();
-
-    return (<div>
-        { active
-            ? <MemoryGraph/>
-            : <Pane padding={16} elevation={1}>
-                <Text>The detector is not active</Text>
-            </Pane>
-        }
-    </div>);
+    return (<Pane>
+        <MemoryHeapChart/>
+        <SimpleCurrentStats/>
+    </Pane>);
 }
 
 export default Main;
