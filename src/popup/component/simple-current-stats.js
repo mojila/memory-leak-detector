@@ -7,8 +7,15 @@ function SimpleCurrentStats(props) {
 
     useEffect(() => {
         const updateSeries = setInterval(() => {
-            setUsedMemory(performance.memory.usedJSHeapSize);
-            setTotalMemory(performance.memory.totalJSHeapSize);
+            chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+                if ([...tabs].length > 0) {
+                    chrome.tabs.sendMessage(tabs[0].id, {greeting: "hello"}, function(response) {
+                        let { memoryUsed, memoryHeapTotal } = response.farewell;
+                        setUsedMemory(memoryUsed);
+                        setTotalMemory(memoryHeapTotal);
+                    });
+                }
+            });
         }, 1000);
 
         return () => clearInterval(updateSeries);

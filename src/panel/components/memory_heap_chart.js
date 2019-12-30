@@ -31,10 +31,10 @@ export default function MemoryHeapChart(props) {
     const [selectedChartType, setSelectedChartType] = useState('line');
     const [series, setSeries] = useState([{
         name: 'Memory Used',
-        data: [ { x: moment().format('HH:mm:ss'), y: performance.memory.usedJSHeapSize } ]
+        data: [ { x: moment().format('HH:mm:ss'), y: 0 } ]
     }, {
         name: 'Memory Heap Total',
-        data: [ { x: moment().format('HH:mm:ss'), y: performance.memory.totalJSHeapSize }]
+        data: [ { x: moment().format('HH:mm:ss'), y: 0 }]
     }]);
 
     useEffect(() => {
@@ -46,8 +46,15 @@ export default function MemoryHeapChart(props) {
                 newSeries[1].data = newSeries[1].data.slice(1);
             }
 
-            newSeries[0].data.push({ x: moment().format('HH:mm:ss'), y: performance.memory.usedJSHeapSize });
-            newSeries[1].data.push({ x: moment().format('HH:mm:ss'), y: performance.memory.totalJSHeapSize });
+            chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+                if ([...tabs].length > 0) {
+                    chrome.tabs.sendMessage(tabs[0].id, {greeting: "hello"}, function(response) {
+                        let { memoryUsed, memoryHeapTotal } = response.farewell;
+                        newSeries[0].data.push({ x: moment().format('HH:mm:ss'), y: memoryUsed });
+                        newSeries[1].data.push({ x: moment().format('HH:mm:ss'), y: memoryHeapTotal });
+                    });
+                }
+            });
 
             setSeries(newSeries);
             ApexCharts.exec('memory-usage', 'updateSeries', newSeries);

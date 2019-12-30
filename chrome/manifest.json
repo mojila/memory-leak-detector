@@ -1,6 +1,6 @@
 {
     "name": "Meleak",
-    "description": "Extends the developer tools",
+    "description": "Tool for Memory Leak Detector",
     "version": "1.0",
     "author": "Mojila",
     "manifest_version": 2,
@@ -11,5 +11,10 @@
     },
     "permissions": [
         "activeTab"
-    ]
+    ],
+    "content_scripts": [{
+        "matches": ["<all_urls>"],
+        "all_frames": true,
+        "js": ["scripts/content.js"]
+    }]
 }
