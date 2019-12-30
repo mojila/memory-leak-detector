@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "panel-dev": "rm devtools/panel/* && parcel src/panel/index.html --public-url ./ --out-dir devtools/panel",
-    "panel-dev-browser": "rm devtools/panel/* && parcel src/panel/index.html --out-dir devtools/panel",
-    "panel-build": "rm devtools/panel/* && parcel build src/panel/index.html --public-url ./ --out-dir devtools/panel"
+    "panel-dev": "rm -rf devtools/* && parcel src/panel/index.html --public-url ./ --out-dir devtools",
+    "panel-dev-browser": "rm -rf devtools/* && parcel src/panel/index.html --out-dir devtools",
+    "panel-build": "rm -rf devtools/* && parcel build src/panel/index.html --public-url ./ --out-dir devtools"
   },
   "repository": {
     "type": "git",
