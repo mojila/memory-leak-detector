@@ -22,7 +22,7 @@ export const Reducer = (state, action) => {
 };
 
 export const State = {
-    active: false
+    active: true
 };
 
 const useMain = () => {

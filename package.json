@@ -7,7 +7,10 @@
     "panel-dev": "rm -rf chrome/devtools/* && parcel src/panel/index.html --public-url ./ --out-dir chrome/devtools",
     "panel-dev-browser": "rm -rf chrome/devtools/* && parcel src/panel/index.html --out-dir chrome/devtools",
     "panel-build": "rm -rf chrome/devtools/* && parcel build src/panel/index.html --public-url ./ --out-dir chrome/devtools",
-    "popup-dev": "rm -rf chrome/devtools/* && parcel src/panel/index.html --public-url ./ --out-dir chrome/devtools"
+    "popup-dev": "rm -rf chrome/popup/* && parcel src/popup/index.html --public-url ./ --out-dir chrome/popup",
+    "popup-dev-browser": "rm -rf chrome/popup/* && parcel src/popup/index.html --out-dir chrome/popup",
+    "popup-build": "rm -rf chrome/popup/* && parcel build src/popup/index.html --public-url ./ --out-dir chrome/popup",
+    "build": "npm run panel-build && npm run popup-build"
   },
   "repository": {
     "type": "git",
@@ -26,6 +29,7 @@
   "dependencies": {
     "@nivo/line": "^0.61.1",
     "apexcharts": "^3.11.3",
+    "constate": "^1.3.2",
     "d3-time": "^1.1.0",
     "evergreen-ui": "^4.21.5",
     "lodash": "^4.17.15",
