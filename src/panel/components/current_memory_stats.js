@@ -1,32 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Pane, Text, SegmentedControl, Button } from 'evergreen-ui';
 
-export default function CurrentMemoryStats(props) {
+export default function CurrentMemoryStats({ usedMemory, totalMemory }) {
     const options = [
         { label: 'Byte', value: 'b' },
         { label: 'Kilobyte', value: 'kb' },
         { label: 'Megabyte', value: 'mb' }
     ];
     const [selectedOption, setSelectedOption] = useState('mb');
-    const [usedMemory, setUsedMemory] = useState(performance.memory.usedJSHeapSize);
-    const [totalMemory, setTotalMemory] = useState(performance.memory.totalJSHeapSize);
-
-    useEffect(() => {
-        const updateSeries = setInterval(() => {
-            chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-                if ([...tabs].length > 0) {
-                    chrome.tabs.sendMessage(tabs[0].id, {greeting: "hello"}, function(response) {
-                        let { memoryUsed, memoryHeapTotal } = response.farewell;
-                        setUsedMemory(memoryUsed);
-                        setTotalMemory(memoryHeapTotal);
-                    });
-                }
-            });
-        }, 1000);
-
-        return () => clearInterval(updateSeries);
-
-    }, [setTotalMemory, setUsedMemory]);
 
     return (<Pane width={260} background="tint1" padding={8} 
         paddingRight={16} paddingLeft={16} borderRadius={4} flex={1}>
