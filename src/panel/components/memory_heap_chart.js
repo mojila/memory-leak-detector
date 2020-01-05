@@ -12,7 +12,9 @@ export default function MemoryHeapChart(props) {
               enabled: false
           },
           stroke: {
-              curve: 'straight'
+            width: [4, 4],
+            curve: 'straight',
+            dashArray: [0, 5]
           },
           grid: {
             padding: {
