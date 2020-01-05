@@ -19,7 +19,7 @@ const MemoryGraph = () => {
         x: time.timeSecond.offset(date, i),
         y: performance.memory.usedJSHeapSize / 1000
     })));
-    const [totalUsedMemory, setTotalUsedMemory] = useState(performance.memory.totalJSHeapSize / 1000);
+    const [totalusedHeap, setTotalusedHeap] = useState(performance.memory.totalJSHeapSize / 1000);
     const [limit, setLimit] = useState(performance.memory.jsHeapSizeLimit / 1000)
     
     useEffect(() => {
@@ -36,7 +36,7 @@ const MemoryGraph = () => {
         //   y: 10 + Math.round(Math.random() * 55)
         });
 
-        setTotalUsedMemory(performance.memory.totalJSHeapSize / 1000);
+        setTotalusedHeap(performance.memory.totalJSHeapSize / 1000);
         setDataA(data);
     };
 
@@ -47,7 +47,7 @@ const MemoryGraph = () => {
                 margin={{ top: 0, right: 30, bottom: 30, left: 50 }}
                 data={[{ id: 'Memory Used', data: dataA }]}
                 xScale={{ type: 'time', format: 'native' }}
-                yScale={{ type: 'linear', max: totalUsedMemory }}
+                yScale={{ type: 'linear', max: totalusedHeap }}
                 axisBottom={{
                     format: '%H:%M:%S',
                     legend: `Memory Used Graph`,
@@ -70,7 +70,7 @@ const MemoryGraph = () => {
             />
             <Pane>
                 <Pane>Memory Used Active { last(dataA).y } Kilobytes</Pane>
-                <Pane>Memory Used Total { totalUsedMemory } Kilobytes</Pane>
+                <Pane>Memory Used Total { totalusedHeap } Kilobytes</Pane>
                 <Pane>Memory Used Limit { limit } Kilobytes</Pane>
             </Pane>
         </Pane>

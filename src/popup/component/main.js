@@ -4,8 +4,8 @@ import MemoryHeapChart from '../../panel/components/memory_heap_chart';
 import SimpleCurrentStats from './simple-current-stats';
 
 function Main(props) {
-    const [usedMemory, setUsedMemory] = useState(0);
-    const [totalMemory, setTotalMemory] = useState(0);
+    const [usedHeap, setUsedHeap] = useState(0);
+    const [totalHeap, setTotalHeap] = useState(0);
 
     useEffect(() => {
         const updateSeries = setInterval(() => {
@@ -13,8 +13,8 @@ function Main(props) {
                 if ([...tabs].length > 0) {
                     chrome.tabs.sendMessage(tabs[0].id, {greeting: "hello"}, function(response) {
                         let { memoryUsed, memoryHeapTotal } = response.farewell;
-                        setUsedMemory(memoryUsed);
-                        setTotalMemory(memoryHeapTotal);
+                        setUsedHeap(memoryUsed);
+                        setTotalHeap(memoryHeapTotal);
                     });
                 }
             });
@@ -22,11 +22,11 @@ function Main(props) {
 
         return () => clearInterval(updateSeries);
 
-    }, [setTotalMemory, setUsedMemory]);
+    }, [setTotalHeap, setUsedHeap]);
 
     return (<Pane>
         <MemoryHeapChart/>
-        <SimpleCurrentStats usedMemory={usedMemory} totalMemory={totalMemory}/>
+        <SimpleCurrentStats usedHeap={usedHeap} totalHeap={totalHeap}/>
     </Pane>);
 }
 

@@ -7,8 +7,8 @@ import MemoryLeakCount from './components/memory_leak_count';
 import LastMemoryLeak from './components/last_memory_leak';
 
 const App = (props) => {
-    const [usedMemory, setUsedMemory] = useState(0);
-    const [totalMemory, setTotalMemory] = useState(0);
+    const [usedHeap, setUsedHeap] = useState(0);
+    const [totalHeap, setTotalHeap] = useState(0);
 
     useEffect(() => {
         const updateSeries = setInterval(() => {
@@ -16,8 +16,8 @@ const App = (props) => {
                 if ([...tabs].length > 0) {
                     chrome.tabs.sendMessage(tabs[0].id, {greeting: "hello"}, function(response) {
                         let { memoryUsed, memoryHeapTotal } = response.farewell;
-                        setUsedMemory(memoryUsed);
-                        setTotalMemory(memoryHeapTotal);
+                        setUsedHeap(memoryUsed);
+                        setTotalHeap(memoryHeapTotal);
                     });
                 }
             });
@@ -25,7 +25,7 @@ const App = (props) => {
 
         return () => clearInterval(updateSeries);
 
-    }, [setTotalMemory, setUsedMemory]);
+    }, [setTotalHeap, setUsedHeap]);
 
     return (<Pane display="flex">
         {/* Current Stats */}
@@ -34,7 +34,7 @@ const App = (props) => {
         </Pane>
         <Pane flex={1} background="overlay" borderRadius={4} padding={8} elevation={1}>
             <Pane display="flex">
-                <CurrentMemoryStats usedMemory={usedMemory} totalMemory={totalMemory}/>
+                <CurrentMemoryStats usedHeap={usedHeap} totalHeap={totalHeap}/>
                 <MemoryLeakCount/>
             </Pane>
             <Pane>

@@ -26,16 +26,16 @@ export default function MemoryHeapChart(props) {
             type: 'numeric'
         }
     };
-    const chartType = [
-        { label: 'Line', value: 'line' },
-        { label: 'Scatter', value: 'scatter' },
-    ];
-    const [selectedChartType, setSelectedChartType] = useState('line');
+    // const chartType = [
+    //     { label: 'Line', value: 'line' },
+    //     { label: 'Scatter', value: 'scatter' },
+    // ];
+    // const [selectedChartType, setSelectedChartType] = useState('line');
     const [series, setSeries] = useState([{
-        name: 'Current Used',
+        name: 'Used Heap',
         data: [ { x: moment().format('HH:mm:ss'), y: 0 } ]
     }, {
-        name: 'Heap Size',
+        name: 'Total Heap',
         data: [ { x: moment().format('HH:mm:ss'), y: 0 }]
     }]);
 
@@ -66,17 +66,17 @@ export default function MemoryHeapChart(props) {
     }, [setSeries]);
     
     return (<Pane>
-        <Pane padding={8}>
+        {/* <Pane padding={8}>
             <SegmentedControl
                 name="Type"
                 height={24}
                 options={chartType}
                 value={selectedChartType}
                 onChange={value => setSelectedChartType(value)}/>
-        </Pane>
+        </Pane> */}
         <Pane>
-            { selectedChartType === 'line' && <ApexChart options={options} series={series} type={selectedChartType} height="200" /> }
-            { selectedChartType === 'scatter' && <ApexChart options={options} series={series} type={selectedChartType} height="200" /> }
+            <ApexChart options={options} series={series} type={'line'} height="200" />
+            {/* { selectedChartType === 'scatter' && <ApexChart options={options} series={series} type={selectedChartType} height="200" /> } */}
         </Pane>
     </Pane>);
 }

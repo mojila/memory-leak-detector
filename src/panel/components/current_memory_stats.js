@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Pane, Text, SegmentedControl, Button } from 'evergreen-ui';
 
-export default function CurrentMemoryStats({ usedMemory, totalMemory }) {
+export default function CurrentMemoryStats({ usedHeap, totalHeap }) {
     const options = [
         { label: 'Byte', value: 'b' },
         { label: 'Kilobyte', value: 'kb' },
@@ -14,7 +14,7 @@ export default function CurrentMemoryStats({ usedMemory, totalMemory }) {
         <Pane display="flex" marginBottom={8}>
             <Button flex={1} justifyContent="center" 
                 height={24} iconBefore="chart" disabled={true}>
-                Memory Status
+                Heap Stats
             </Button>
         </Pane>
         <Pane justifyContent="space-between">
@@ -26,10 +26,10 @@ export default function CurrentMemoryStats({ usedMemory, totalMemory }) {
                 onChange={value => setSelectedOption(value)}/>
         </Pane>
         <Pane marginTop={8}>
-            <Text>Current active: {(usedMemory / (selectedOption === 'b' ? 1:(selectedOption === 'kb' ? 1000:1000000))).toFixed(1)} {selectedOption.toUpperCase()}</Text>
+            <Text>Used Heap: {(usedHeap / (selectedOption === 'b' ? 1:(selectedOption === 'kb' ? 1000:1000000))).toFixed(1)} {selectedOption.toUpperCase()}</Text>
         </Pane>
         <Pane>
-            <Text>Heap Size: {(totalMemory / (selectedOption === 'b' ? 1:(selectedOption === 'kb' ? 1000:1000000))).toFixed(1)} {selectedOption.toUpperCase()}</Text>
+            <Text>Total Heap: {(totalHeap / (selectedOption === 'b' ? 1:(selectedOption === 'kb' ? 1000:1000000))).toFixed(1)} {selectedOption.toUpperCase()}</Text>
         </Pane>
     </Pane>)
 }
