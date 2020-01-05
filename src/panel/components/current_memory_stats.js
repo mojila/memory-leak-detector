@@ -14,7 +14,7 @@ export default function CurrentMemoryStats({ usedMemory, totalMemory }) {
         <Pane display="flex" marginBottom={8}>
             <Button flex={1} justifyContent="center" 
                 height={24} iconBefore="chart" disabled={true}>
-                Current Memory Heap
+                Memory Status
             </Button>
         </Pane>
         <Pane justifyContent="space-between">
@@ -26,10 +26,10 @@ export default function CurrentMemoryStats({ usedMemory, totalMemory }) {
                 onChange={value => setSelectedOption(value)}/>
         </Pane>
         <Pane marginTop={8}>
-            <Text>Memory Used: {(usedMemory / (selectedOption === 'b' ? 1:(selectedOption === 'kb' ? 1000:1000000))).toFixed(1)} {selectedOption.toUpperCase()}</Text>
+            <Text>Current active: {(usedMemory / (selectedOption === 'b' ? 1:(selectedOption === 'kb' ? 1000:1000000))).toFixed(1)} {selectedOption.toUpperCase()}</Text>
         </Pane>
         <Pane>
-            <Text>Heap Total: {(totalMemory / (selectedOption === 'b' ? 1:(selectedOption === 'kb' ? 1000:1000000))).toFixed(1)} {selectedOption.toUpperCase()}</Text>
+            <Text>Heap Size: {(totalMemory / (selectedOption === 'b' ? 1:(selectedOption === 'kb' ? 1000:1000000))).toFixed(1)} {selectedOption.toUpperCase()}</Text>
         </Pane>
     </Pane>)
 }

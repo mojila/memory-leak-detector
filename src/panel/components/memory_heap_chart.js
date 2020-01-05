@@ -32,10 +32,10 @@ export default function MemoryHeapChart(props) {
     ];
     const [selectedChartType, setSelectedChartType] = useState('line');
     const [series, setSeries] = useState([{
-        name: 'Memory Used',
+        name: 'Current Used',
         data: [ { x: moment().format('HH:mm:ss'), y: 0 } ]
     }, {
-        name: 'Memory Heap Total',
+        name: 'Heap Size',
         data: [ { x: moment().format('HH:mm:ss'), y: 0 }]
     }]);
 
