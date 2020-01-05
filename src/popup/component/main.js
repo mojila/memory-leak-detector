@@ -25,7 +25,7 @@ function Main(props) {
     }, [setTotalHeap, setUsedHeap]);
 
     return (<Pane>
-        <MemoryHeapChart/>
+        {/* <MemoryHeapChart/> */}
         <SimpleCurrentStats usedHeap={usedHeap} totalHeap={totalHeap}/>
     </Pane>);
 }

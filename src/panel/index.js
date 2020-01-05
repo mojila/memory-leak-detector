@@ -30,7 +30,7 @@ const App = (props) => {
     return (<Pane display="flex">
         {/* Current Stats */}
         <Pane flex={1} background="tint2" padding={8} borderRadius={4} elevation={1} marginRight={16}>
-            <MemoryHeapChart/>
+            {/* <MemoryHeapChart/> */}
         </Pane>
         <Pane flex={1} background="overlay" borderRadius={4} padding={8} elevation={1}>
             <Pane display="flex">

@@ -7,7 +7,7 @@ import Main from './component/main';
 function App() {
     return (
         <Context.Provider>
-            <Header/>
+            {/* <Header/> */}
             <Main/>
         </Context.Provider>
     );
