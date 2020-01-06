@@ -1,15 +1,17 @@
-import React from 'react';
+import React, { useReducer } from 'react';
 import ReactDOM from 'react-dom';
 import Header from './component/header';
-import { Context } from './context';
 import Main from './component/main';
+import MemoryContext, { Store, Reducer } from '../context';
 
 function App() {
+    const [store, dispatch] = useReducer(Reducer, Store);
+
     return (
-        <Context.Provider>
+        <MemoryContext.Provider value={{ store, dispatch }}>
             {/* <Header/> */}
             <Main/>
-        </Context.Provider>
+        </MemoryContext.Provider>
     );
 }
 

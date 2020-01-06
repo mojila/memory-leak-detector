@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Pane, Text, SegmentedControl, Button } from 'evergreen-ui';
+import MemoryContext from '../../context';
 
-export default function CurrentMemoryStats({ usedHeap, totalHeap }) {
+export default function CurrentMemoryStats() {
+    const { store, dispatch } = useContext(MemoryContext);
+    
     const options = [
         { label: 'Byte', value: 'b' },
         { label: 'Kilobyte', value: 'kb' },
@@ -26,10 +29,10 @@ export default function CurrentMemoryStats({ usedHeap, totalHeap }) {
                 onChange={value => setSelectedOption(value)}/>
         </Pane>
         <Pane marginTop={8}>
-            <Text>Used Heap: {(usedHeap / (selectedOption === 'b' ? 1:(selectedOption === 'kb' ? 1000:1000000))).toFixed(1)} {selectedOption.toUpperCase()}</Text>
+            <Text>Used Heap: {(store.usedHeap / (selectedOption === 'b' ? 1:(selectedOption === 'kb' ? 1000:1000000))).toFixed(1)} {selectedOption.toUpperCase()}</Text>
         </Pane>
         <Pane>
-            <Text>Total Heap: {(totalHeap / (selectedOption === 'b' ? 1:(selectedOption === 'kb' ? 1000:1000000))).toFixed(1)} {selectedOption.toUpperCase()}</Text>
+            <Text>Total Heap: {(store.totalHeap / (selectedOption === 'b' ? 1:(selectedOption === 'kb' ? 1000:1000000))).toFixed(1)} {selectedOption.toUpperCase()}</Text>
         </Pane>
     </Pane>)
 }

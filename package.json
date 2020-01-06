@@ -4,11 +4,11 @@
   "description": "Automatic Memory Leak Detector for Web Frontend Javascript",
   "main": "index.js",
   "scripts": {
-    "panel-dev": "rm -rf chrome/devtools/* && parcel src/panel/index.html --public-url ./ --out-dir chrome/devtools",
-    "panel-dev-browser": "rm -rf chrome/devtools/* && parcel src/panel/index.html --out-dir chrome/devtools",
+    "panel-dev": "rm -rf devchrome/devtools/* && parcel src/panel/index.html --public-url ./ --out-dir devchrome/devtools",
+    "panel-dev-browser": "rm -rf devchrome/devtools/* && parcel src/panel/index.html --out-dir devchrome/devtools",
     "panel-build": "rm -rf chrome/devtools/* && parcel build src/panel/index.html --public-url ./ --out-dir chrome/devtools",
-    "popup-dev": "rm -rf chrome/popup/* && parcel src/popup/index.html --public-url ./ --out-dir chrome/popup",
-    "popup-dev-browser": "rm -rf chrome/popup/* && parcel src/popup/index.html --out-dir chrome/popup",
+    "popup-dev": "rm -rf devchrome/popup/* && parcel src/popup/index.html --public-url ./ --out-dir devchrome/popup",
+    "popup-dev-browser": "rm -rf devchrome/popup/* && parcel src/popup/index.html --out-dir devchrome/popup",
     "popup-build": "rm -rf chrome/popup/* && parcel build src/popup/index.html --public-url ./ --out-dir chrome/popup",
     "build": "npm run panel-build && npm run popup-build"
   },

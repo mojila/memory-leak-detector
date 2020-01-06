@@ -3,3 +3,5 @@ node_modules
 dist
 chrome/devtools
 chrome/popup
+devchrome/devtools
+devchrome/popup
