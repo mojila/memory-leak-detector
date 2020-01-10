@@ -12,15 +12,13 @@ export const Store = {
     }, {
         name: 'Total Heap',
         data: [ { x: moment().format('HH:mm:ss'), y: 0 }]
-    }],
-    minuteLog: []
+    }]
 };
 
 export const actions = {
     SET_USED_HEAP: 'SET_USED_HEAP',
     SET_TOTAL_HEAP: 'SET_TOTAL_HEAP',
-    SET_SERIES: 'SET_SERIES',
-    SET_MINUTE_LOG: 'SET_MINUTE_LOG'
+    SET_SERIES: 'SET_SERIES'
 };
 
 export const successMessageLog = (message) => console.log(`Success: ${message}`);
@@ -29,17 +27,14 @@ export const errorMessageLog = (message) => console.log(new Error(message));
 export const Reducer = (state, action) => {
     switch (action.type) {
         case actions.SET_TOTAL_HEAP:
-            successMessageLog(`Total Heap Writed.`);
+            // successMessageLog(`Total Heap Writed.`);
             return { ...state, totalHeap: action.value };
         case actions.SET_USED_HEAP:
-            successMessageLog(`Used Heap Writed.`);
+            // successMessageLog(`Used Heap Writed.`);
             return { ...state, usedHeap: action.value };
         case actions.SET_SERIES:
-            successMessageLog(`Series Writed.`);
+            // successMessageLog(`Series Writed.`);
             return { ...state, series: action.value };
-        case actions.SET_MINUTE_LOG:
-            successMessageLog(`Minute Log Writed.`);
-            return { ...state, minuteLog: action.value };
         default:
             errorMessageLog(`Action didn't have type.`);
             return state;
