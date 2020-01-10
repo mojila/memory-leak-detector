@@ -12,13 +12,17 @@ export const Store = {
     }, {
         name: 'Total Heap',
         data: [ { x: moment().format('HH:mm:ss'), y: 0 }]
+    }],
+    minutes: [{
+        data: [ { timestamp: moment().toISOString(), value: 0 } ]
     }]
 };
 
 export const actions = {
     SET_USED_HEAP: 'SET_USED_HEAP',
     SET_TOTAL_HEAP: 'SET_TOTAL_HEAP',
-    SET_SERIES: 'SET_SERIES'
+    SET_SERIES: 'SET_SERIES',
+    SET_MINUTES: 'SET_MINUTES'
 };
 
 export const successMessageLog = (message) => console.log(`Success: ${message}`);
@@ -35,6 +39,8 @@ export const Reducer = (state, action) => {
         case actions.SET_SERIES:
             // successMessageLog(`Series Writed.`);
             return { ...state, series: action.value };
+        case actions.SET_MINUTES:
+            return { ...state, minutes: action.value };
         default:
             errorMessageLog(`Action didn't have type.`);
             return state;

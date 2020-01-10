@@ -55,6 +55,17 @@ export default function MemoryHeapChart() {
     }
 
     const onUpdateMinutes = (totalHeap) => {
+        let temp = store.minutes;
+
+        if (temp[0].data.length > 59) {
+            temp[0].data = temp[0].data.slice(1);
+        }
+
+        temp[0].data.push({ timestamp: moment().toISOString(), value: totalHeap });
+
+        console.log(temp[0].data);
+
+        dispatch({ type: actions.SET_MINUTES, value: temp });
     }
 
     useEffect(() => {
