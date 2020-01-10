@@ -6,3 +6,4 @@ chrome/popup
 devchrome/devtools
 devchrome/popup
 .Rproj.user
+src/calculation/target
