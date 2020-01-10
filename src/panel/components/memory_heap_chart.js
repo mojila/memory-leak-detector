@@ -4,7 +4,9 @@ import { Pane, SegmentedControl } from 'evergreen-ui';
 import moment from 'moment';
 import MemoryContext, { actions } from '../../context';
 // Rust WebAssembly
-import { sub } from '../../calculation/src/lib.rs';
+// import { sub } from '../../calculation/src/lib.rs';
+// Helper
+import NormalDistribution from '../../helpers/outlier_detection_normal_distribution';
 
 export default function MemoryHeapChart() {
     const { store, dispatch } = useContext(MemoryContext);
