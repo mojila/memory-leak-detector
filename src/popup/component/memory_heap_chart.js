@@ -44,25 +44,25 @@ export default function MemoryHeapChart() {
             //     minuteLog = minuteLog.slice(1);
             // }
 
-            // let usedHeap = performance.memory.usedJSHeapSize;
-            // let totalHeap = performance.memory.totalJSHeapSize;
+            let usedHeap = performance.memory.usedJSHeapSize;
+            let totalHeap = performance.memory.totalJSHeapSize;
 
-            // newSeries[0].data.push({ x: moment().format('HH:mm:ss'), y: usedHeap });
-            // newSeries[1].data.push({ x: moment().format('HH:mm:ss'), y: totalHeap });
+            newSeries[0].data.push({ x: moment().format('HH:mm:ss'), y: usedHeap });
+            newSeries[1].data.push({ x: moment().format('HH:mm:ss'), y: totalHeap });
 
-            chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-                if (Array.from(tabs).length > 0) {
-                    chrome.tabs.sendMessage(tabs[0].id, {greeting: "hello"}, function(response) {
-                        let { memoryUsed, memoryHeapTotal } = response.farewell;
-                        let usedHeap = { x: moment().toISOString(), y: memoryUsed };
-                        let totalHeap = { x: moment().toISOString(), y: memoryHeapTotal };
+            // chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+            //     if (Array.from(tabs).length > 0) {
+            //         chrome.tabs.sendMessage(tabs[0].id, {greeting: "hello"}, function(response) {
+            //             let { memoryUsed, memoryHeapTotal } = response.farewell;
+            //             let usedHeap = { x: moment().toISOString(), y: memoryUsed };
+            //             let totalHeap = { x: moment().toISOString(), y: memoryHeapTotal };
                         
-                        newSeries[0].data.push({...usedHeap, x: moment(usedHeap.x).format('HH:mm:ss') });
-                        newSeries[1].data.push({...totalHeap, x: moment(totalHeap.x).format('HH:mm:ss') });
-                        // minuteLog.push(totalHeap);
-                    });
-                }
-            });
+            //             newSeries[0].data.push({...usedHeap, x: moment(usedHeap.x).format('HH:mm:ss') });
+            //             newSeries[1].data.push({...totalHeap, x: moment(totalHeap.x).format('HH:mm:ss') });
+            //             // minuteLog.push(totalHeap);
+            //         });
+            //     }
+            // });
 
             // console.log(minuteLog);
             

@@ -3,6 +3,8 @@ import ApexChart from 'react-apexcharts';
 import { Pane, SegmentedControl } from 'evergreen-ui';
 import moment from 'moment';
 import MemoryContext, { actions } from '../../context';
+// Rust WebAssembly
+import { sub } from '../../calculation/src/lib.rs';
 
 export default function MemoryHeapChart() {
     const { store, dispatch } = useContext(MemoryContext);
@@ -40,35 +42,38 @@ export default function MemoryHeapChart() {
                 newSeries[1].data = newSeries[1].data.slice(1);
             }
 
-            if (minuteLog.length > 60) {
+            if (minuteLog.length >= 60) {
                 minuteLog = minuteLog.slice(1);
             }
 
-            // let usedHeap = performance.memory.usedJSHeapSize;
-            // let totalHeap = performance.memory.totalJSHeapSize;
+            let usedHeap = performance.memory.usedJSHeapSize;
+            let totalHeap = performance.memory.totalJSHeapSize;
 
-            // newSeries[0].data.push({ x: moment().format('HH:mm:ss'), y: usedHeap });
-            // newSeries[1].data.push({ x: moment().format('HH:mm:ss'), y: totalHeap });
+            newSeries[0].data.push({ x: moment().format('HH:mm:ss'), y: usedHeap });
+            newSeries[1].data.push({ x: moment().format('HH:mm:ss'), y: totalHeap });
+            minuteLog.push({ timestamp: moment().toISOString(), value: totalHeap });
 
-            chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-                if (Array.from(tabs).length > 0) {
-                    chrome.tabs.sendMessage(tabs[0].id, {greeting: "hello"}, function(response) {
-                        let { memoryUsed, memoryHeapTotal } = response.farewell;
-                        let usedHeap = { x: moment().toISOString(), y: memoryUsed };
-                        let totalHeap = { x: moment().toISOString(), y: memoryHeapTotal };
+            // chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+            //     if (Array.from(tabs).length > 0) {
+            //         chrome.tabs.sendMessage(tabs[0].id, {greeting: "hello"}, function(response) {
+            //             let { memoryUsed, memoryHeapTotal } = response.farewell;
+            //             let usedHeap = { x: moment().toISOString(), y: memoryUsed };
+            //             let totalHeap = { x: moment().toISOString(), y: memoryHeapTotal };
                         
-                        newSeries[0].data.push({...usedHeap, x: moment(usedHeap.x).format('HH:mm:ss') });
-                        newSeries[1].data.push({...totalHeap, x: moment(totalHeap.x).format('HH:mm:ss') });
-                        minuteLog.push(totalHeap);
-                    });
-                }
-            });
+            //             newSeries[0].data.push({...usedHeap, x: moment(usedHeap.x).format('HH:mm:ss') });
+            //             newSeries[1].data.push({...totalHeap, x: moment(totalHeap.x).format('HH:mm:ss') });
+            //             minuteLog.push(totalHeap);
+            //         });
+            //     }
+            // });
 
             console.log(minuteLog);
+            // console.log(sub(10,2));
             
             dispatch({ type: actions.SET_USED_HEAP, value: newSeries[0].data.slice(-1)[0].y });
             dispatch({ type: actions.SET_TOTAL_HEAP, value: newSeries[1].data.slice(-1)[0].y });
             dispatch({ type: actions.SET_SERIES, value: newSeries });
+
             dispatch({ type: actions.SET_MINUTE_LOG, value: minuteLog });
             ApexCharts.exec('memory-usage', 'updateSeries', newSeries);
         }, 1000);
