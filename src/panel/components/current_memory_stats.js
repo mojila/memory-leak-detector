@@ -29,10 +29,10 @@ export default function CurrentMemoryStats() {
                 onChange={value => setSelectedOption(value)}/>
         </Pane>
         <Pane marginTop={8}>
-            <Text>Used Heap: {(store.usedHeap / (selectedOption === 'b' ? 1:(selectedOption === 'kb' ? 1000:1000000))).toFixed(1)} {selectedOption.toUpperCase()}</Text>
+            <Text>Used Heap: {(store.usedHeap / (selectedOption === 'b' ? 1:(selectedOption === 'kb' ? 1000:1000000))).toFixed(2)} {selectedOption.toUpperCase()}</Text>
         </Pane>
         <Pane>
-            <Text>Total Heap: {(store.totalHeap / (selectedOption === 'b' ? 1:(selectedOption === 'kb' ? 1000:1000000))).toFixed(1)} {selectedOption.toUpperCase()}</Text>
+            <Text>Total Heap: {(store.totalHeap / (selectedOption === 'b' ? 1:(selectedOption === 'kb' ? 1000:1000000))).toFixed(2)} {selectedOption.toUpperCase()}</Text>
         </Pane>
     </Pane>)
 }

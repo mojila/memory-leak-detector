@@ -3,6 +3,7 @@ import ApexChart from 'react-apexcharts';
 import { Pane } from 'evergreen-ui';
 import moment from 'moment';
 import MemoryContext, { actions } from '../../context';
+import { normal_distribution } from '../../helpers/outlier_detection';
 
 export default function MemoryHeapChart() {
     const { store, dispatch } = useContext(MemoryContext);
@@ -30,7 +31,7 @@ export default function MemoryHeapChart() {
         }
     };
 
-    const onUpdateSeries = (usedHeap, totalHeap) => {
+    const onUpdateSeries = (usedHeap, totalHeap, tabId) => {
         let newSeries = store.series;
 
         if (newSeries[0].data.length > 10 && newSeries[1].data.length > 10) {
@@ -43,18 +44,21 @@ export default function MemoryHeapChart() {
 
         dispatch({ type: actions.SET_SERIES, value: newSeries });
 
+        localStorage.setItem(`series-${tabId}`, JSON.stringify(newSeries));
+
         ApexCharts.exec('memory-usage', 'updateSeries', newSeries);
-        onUpdateStats(newSeries[0].data.slice(-1)[0].y, newSeries[1].data.slice(-1)[0].y);
+
+        onUpdateStats(newSeries[0].data.slice(-1)[0].y, newSeries[1].data.slice(-1)[0].y, tabId);
     }
 
-    const onUpdateStats = (usedHeap, totalHeap) => {
+    const onUpdateStats = (usedHeap, totalHeap, tabId) => {
         dispatch({ type: actions.SET_USED_HEAP, value: usedHeap });
         dispatch({ type: actions.SET_TOTAL_HEAP, value: totalHeap });
 
-        onUpdateMinutes(totalHeap);
+        onUpdateMinutes(totalHeap, tabId);
     }
 
-    const onUpdateMinutes = (totalHeap) => {
+    const onUpdateMinutes = (totalHeap, tabId) => {
         let temp = store.minutes;
 
         if (temp[0].data.length > 59) {
@@ -63,9 +67,39 @@ export default function MemoryHeapChart() {
 
         temp[0].data.push({ timestamp: moment().toISOString(), value: totalHeap });
 
-        console.log(temp[0].data);
-
         dispatch({ type: actions.SET_MINUTES, value: temp });
+
+        if (temp[0].data.length > 59) {
+            findOutliers(temp[0].data, tabId);
+        }
+    }
+
+    const findOutliers = (sequence, tabId) => {
+        let outliers_found = normal_distribution(sequence);
+        let outliers = '';
+        let outliers_array = [];
+    
+        if (outliers_found.length > 0) {
+            outliers = localStorage.getItem(`outliers-${tabId}`);
+
+            if (outliers) {
+                outliers_array = JSON.parse(outliers);
+
+                if (outliers_array.length > 0) { 
+                    outliers_array.push({
+                        series: sequence,
+                        outliers: outliers_found
+                    });
+                }
+            } else {
+                outliers_array = [{
+                    series: sequence,
+                    outliers: outliers_found
+                }];
+            }
+    
+            localStorage.setItem(`outliers-${tabId}`, JSON.stringify(outliers_array));
+        }
     }
 
     useEffect(() => {
@@ -80,7 +114,7 @@ export default function MemoryHeapChart() {
                         let usedHeap = { x: moment().toISOString(), y: memoryUsed };
                         let totalHeap = { x: moment().toISOString(), y: memoryHeapTotal };
 
-                        onUpdateSeries(usedHeap, totalHeap);
+                        onUpdateSeries(usedHeap, totalHeap, tabs[0].id);
                     });
                 }
             });

@@ -15,18 +15,25 @@ export const Store = {
     }],
     minutes: [{
         data: [ { timestamp: moment().toISOString(), value: 0 } ]
-    }]
+    }],
+    outliers: [{
+        minutes: [],
+        found: []
+    }],
+    tabId: ''
 };
 
 export const actions = {
     SET_USED_HEAP: 'SET_USED_HEAP',
     SET_TOTAL_HEAP: 'SET_TOTAL_HEAP',
     SET_SERIES: 'SET_SERIES',
-    SET_MINUTES: 'SET_MINUTES'
+    SET_MINUTES: 'SET_MINUTES',
+    SET_OUTLIERS: 'SET_OUTLIERS',
+    SET_TAB_ID: 'SET_TAB_ID'
 };
 
-export const successMessageLog = (message) => console.log(`Success: ${message}`);
-export const errorMessageLog = (message) => console.log(new Error(message));
+export const successMessageLog = (message) => console.info(`Success: ${message}`);
+export const errorMessageLog = (message) => console.error(new Error(message));
 
 export const Reducer = (state, action) => {
     switch (action.type) {
@@ -41,6 +48,10 @@ export const Reducer = (state, action) => {
             return { ...state, series: action.value };
         case actions.SET_MINUTES:
             return { ...state, minutes: action.value };
+        case actions.SET_OUTLIERS:
+            return { ...state, outliers: action.value };
+        case actions.SET_TAB_ID:
+            return { ...state, tabId: action.value };
         default:
             errorMessageLog(`Action didn't have type.`);
             return state;
