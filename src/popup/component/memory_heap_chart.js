@@ -58,10 +58,23 @@ export default function MemoryHeapChart() {
             
             chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
                 if (Array.from(tabs).length > 0) {
-                    let hostname = new URL(tabs[0].url).hostname;
-                    let series = localStorage.getItem(`series-${hostname}`);
-                        
-                    onUpdateSeries(JSON.parse(series));
+                    let url = new URL(tabs[0].url);
+                    let outliers = [];
+
+                    dispatch({ type: actions.SET_URL, value: url });
+
+                    let series = localStorage.getItem(`series-${url.hostname}-${url.port}`);
+                    let local_outliers = localStorage.getItem(`outliers-${url.hostname}-${url.port}`);
+
+                    if (local_outliers) {
+                        outliers = JSON.parse(local_outliers);
+                    }
+
+                    dispatch({ type: actions.SET_OUTLIERS, value: outliers });
+                    
+                    if (series) {
+                        onUpdateSeries(JSON.parse(series));
+                    }
                 }
             });
 

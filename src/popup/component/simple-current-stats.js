@@ -6,7 +6,8 @@ import MemoryContext from '../../context';
 function SimpleCurrentStats(props) {
     const { store, dispatch } = useContext(MemoryContext);
 
-    return (<Pane marginX={8} elevation={1} padding={8} display="flex">
+    return (<Pane marginX={8} elevation={1} padding={8} paddingLeft={16} display="flex"
+        backgroundColor="#f1f1f1">
         <Pane flex={1}>
             <Text>Used Heap: {(store.usedHeap / 1000000).toFixed(2)} Mb</Text>
         </Pane>

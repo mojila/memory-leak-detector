@@ -16,11 +16,10 @@ export const Store = {
     minutes: [{
         data: [ { timestamp: moment().toISOString(), value: 0 } ]
     }],
-    outliers: [{
-        minutes: [],
-        found: []
-    }],
-    tabId: ''
+    outliers: [],
+    tabId: '',
+    selected_menu: 'home',
+    url: ''
 };
 
 export const actions = {
@@ -29,7 +28,9 @@ export const actions = {
     SET_SERIES: 'SET_SERIES',
     SET_MINUTES: 'SET_MINUTES',
     SET_OUTLIERS: 'SET_OUTLIERS',
-    SET_TAB_ID: 'SET_TAB_ID'
+    SET_TAB_ID: 'SET_TAB_ID',
+    SET_SELECTED_MENU: 'SET_SELECTED_MENU',
+    SET_URL: 'SET_URL'
 };
 
 export const successMessageLog = (message) => console.info(`Success: ${message}`);
@@ -52,6 +53,10 @@ export const Reducer = (state, action) => {
             return { ...state, outliers: action.value };
         case actions.SET_TAB_ID:
             return { ...state, tabId: action.value };
+        case actions.SET_SELECTED_MENU:
+            return { ...state, selected_menu: action.value };
+        case actions.SET_URL:
+            return { ...state, url: action.value };
         default:
             errorMessageLog(`Action didn't have type.`);
             return state;
