@@ -31,7 +31,7 @@ export default function MemoryHeapChart() {
         }
     };
 
-    const onUpdateSeries = (usedHeap, totalHeap, tabId) => {
+    const onUpdateSeries = (usedHeap, totalHeap, hostname) => {
         let newSeries = store.series;
 
         if (newSeries[0].data.length > 10 && newSeries[1].data.length > 10) {
@@ -44,21 +44,21 @@ export default function MemoryHeapChart() {
 
         dispatch({ type: actions.SET_SERIES, value: newSeries });
 
-        localStorage.setItem(`series-${tabId}`, JSON.stringify(newSeries));
+        localStorage.setItem(`series-${hostname}`, JSON.stringify(newSeries));
 
         ApexCharts.exec('memory-usage', 'updateSeries', newSeries);
 
-        onUpdateStats(newSeries[0].data.slice(-1)[0].y, newSeries[1].data.slice(-1)[0].y, tabId);
+        onUpdateStats(newSeries[0].data.slice(-1)[0].y, newSeries[1].data.slice(-1)[0].y, hostname);
     }
 
-    const onUpdateStats = (usedHeap, totalHeap, tabId) => {
+    const onUpdateStats = (usedHeap, totalHeap, hostname) => {
         dispatch({ type: actions.SET_USED_HEAP, value: usedHeap });
         dispatch({ type: actions.SET_TOTAL_HEAP, value: totalHeap });
 
-        onUpdateMinutes(totalHeap, tabId);
+        onUpdateMinutes(totalHeap, hostname);
     }
 
-    const onUpdateMinutes = (totalHeap, tabId) => {
+    const onUpdateMinutes = (totalHeap, hostname) => {
         let temp = store.minutes;
 
         if (temp[0].data.length > 59) {
@@ -70,17 +70,17 @@ export default function MemoryHeapChart() {
         dispatch({ type: actions.SET_MINUTES, value: temp });
 
         if (temp[0].data.length > 59) {
-            findOutliers(temp[0].data, tabId);
+            findOutliers(temp[0].data, hostname);
         }
     }
 
-    const findOutliers = (sequence, tabId) => {
+    const findOutliers = (sequence, hostname) => {
         let outliers_found = normal_distribution(sequence);
         let outliers = '';
         let outliers_array = [];
     
         if (outliers_found.length > 0) {
-            outliers = localStorage.getItem(`outliers-${tabId}`);
+            outliers = localStorage.getItem(`outliers-${hostname}`);
 
             if (outliers) {
                 outliers_array = JSON.parse(outliers);
@@ -98,7 +98,7 @@ export default function MemoryHeapChart() {
                 }];
             }
     
-            localStorage.setItem(`outliers-${tabId}`, JSON.stringify(outliers_array));
+            localStorage.setItem(`outliers-${hostname}`, JSON.stringify(outliers_array));
         }
     }
 
@@ -107,14 +107,14 @@ export default function MemoryHeapChart() {
             // let usedHeap = performance.memory.usedJSHeapSize;
             // let totalHeap = performance.memory.totalJSHeapSize;
             
-            chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+            chrome.tabs.query({active: true}, function(tabs) {
                 if (Array.from(tabs).length > 0) {
                     chrome.tabs.sendMessage(tabs[0].id, {greeting: "hello"}, function(response) {
                         let { memoryUsed, memoryHeapTotal } = response.farewell;
                         let usedHeap = { x: moment().toISOString(), y: memoryUsed };
                         let totalHeap = { x: moment().toISOString(), y: memoryHeapTotal };
 
-                        onUpdateSeries(usedHeap, totalHeap, tabs[0].id);
+                        onUpdateSeries(usedHeap, totalHeap, new URL(tabs[0].url).hostname);
                     });
                 }
             });

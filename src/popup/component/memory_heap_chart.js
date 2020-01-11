@@ -58,8 +58,8 @@ export default function MemoryHeapChart() {
             
             chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
                 if (Array.from(tabs).length > 0) {
-                    console.log(tabs[0].id);
-                    let series = localStorage.getItem(`series-${tabs[0].id}`);
+                    let hostname = new URL(tabs[0].url).hostname;
+                    let series = localStorage.getItem(`series-${hostname}`);
                         
                     onUpdateSeries(JSON.parse(series));
                 }

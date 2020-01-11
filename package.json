@@ -10,7 +10,9 @@
     "popup-dev": "rm -rf devchrome/popup/* && parcel src/popup/index.html --public-url ./ --out-dir devchrome/popup",
     "popup-dev-browser": "rm -rf devchrome/popup/* && parcel src/popup/index.html --out-dir devchrome/popup",
     "popup-build": "rm -rf chrome/popup/* && parcel build src/popup/index.html --public-url ./ --out-dir chrome/popup",
-    "build": "npm run panel-build && npm run popup-build",
+    "option-dev": "rm -rf devchrome/option/* && parcel src/option/index.html --out-dir devchrome/option",
+    "option-build": "rm -rf chrome/option/* && parcel build src/option/index.html --public-url ./ --out-dir chrome/option",
+    "build": "npm run panel-build && npm run popup-build && npm run option-build",
     "anomaly-detection-dev": "node data/anomalyDetection.js"
   },
   "repository": {

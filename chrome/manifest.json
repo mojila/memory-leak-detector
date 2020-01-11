@@ -9,6 +9,7 @@
         "default_popup": "popup/index.html",
         "default_title": "Memory Leak Detector"
     },
+    "options_page": "option/index.html",
     "background": {
         "scripts": ["background.js"],
         "persistent": false
@@ -16,7 +17,8 @@
     "permissions": [
         "activeTab",
         "storage",
-        "webNavigation"
+        "webNavigation",
+        "tabs"
     ],
     "content_scripts": [{
         "matches": ["<all_urls>"],
