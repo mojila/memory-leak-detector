@@ -86,10 +86,24 @@ export default function MemoryHeapChart() {
                 outliers_array = JSON.parse(outliers);
 
                 if (outliers_array.length > 0) { 
-                    outliers_array.push({
-                        series: sequence,
-                        outliers: outliers_found
+                    let outliers_only = outliers_array.map(d => d.outliers);
+                    let outliers_filter = Array.from(outliers_only).map(e => {
+                        let duplicated = Array.from(e).map(f => {
+                            let equivalent = outliers_found.filter(x => x.timestamp === f.timestamp)[0];
+                            return equivalent;
+                        });
+
+                        return duplicated;
                     });
+                    
+                    if (outliers_filter.length > 0) {
+                        if (outliers_found.length > outliers_filter[outliers_filter.length - 1].length) {
+                            outliers_array.push({
+                                series: sequence,
+                                outliers: outliers_found
+                            });
+                        }
+                    }
                 }
             } else {
                 outliers_array = [{
