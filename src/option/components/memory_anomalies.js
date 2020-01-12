@@ -12,7 +12,15 @@ function MemoryAnomalies(props) {
 
     const options = {
         chart: {
-            id: 'memory-usage'
+            id: 'memory-usage',
+            zoom: {
+                type: 'x',
+                enabled: true,
+                autoScaleYaxis: true
+            },
+            toolbar: {
+                autoSelected: 'zoom'
+            }
         },
         dataLabels: {
             enabled: false
