@@ -1,7 +1,11 @@
-use average::Mean;
-use serde_json;
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn it_works() {
+        assert_eq!(2 + 2, 4);
+    }
+}
 
-#[no_mangle]
-pub fn mean(sequence: ) {
-
+pub fn add(a: i32, b: i32) -> i32 {
+    a + b
 }
