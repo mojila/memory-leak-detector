@@ -4,7 +4,6 @@ import { Pane } from 'evergreen-ui';
 import moment from 'moment';
 import MemoryContext, { actions } from '../../context';
 import { normal_distribution } from '../../helpers/outlier_detection';
-import { outlier_detection } from '../../calculation/src/lib.rs';
 
 export default function MemoryHeapChart() {
     const { store, dispatch } = useContext(MemoryContext);
