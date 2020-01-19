@@ -6,10 +6,6 @@ pub struct Series {
     value: f64
 }
 
-pub fn add(a: i32, b: i32) -> i32 {
-    a + b
-}
-
 fn mean(sequence: &Vec<f64>) -> f64 {
     let mut mean: f64 = 0.0;
 
@@ -68,7 +64,8 @@ fn find_outliers(sequence: &Vec<Series>, min: &f64, max: &f64) -> Vec<Series> {
     return outliers;
 }
 
-pub fn outlier_detection(json_string: &str) -> Vec<Series> {
+#[no_mangle]
+pub fn outlier_detection(json_string: &str) -> String {
     let deserialized: Vec<Series> = serde_json::from_str(&json_string).unwrap();
     let sequence: Vec<f64> = extract_value(&deserialized);
     let sequence_mean: f64 = mean(&sequence);
@@ -78,14 +75,7 @@ pub fn outlier_detection(json_string: &str) -> Vec<Series> {
     let min: f64 = sequence_mean - 3.0 * standard_deviation;
     let max: f64 = sequence_mean + 3.0 * standard_deviation;
     let outliers: Vec<Series> = find_outliers(&deserialized, &min, &max);
+    let to_string = serde_json::to_string(&outliers).unwrap();
 
-    return outliers;
+    return to_string;
 }
-
-//#[cfg(test)]
-//mod tests {
-//    #[test]
-//    fn it_works() {
-//        assert_eq!(2 + 2, 4);
-//    }
-//}

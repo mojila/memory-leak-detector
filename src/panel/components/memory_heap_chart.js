@@ -4,6 +4,7 @@ import { Pane } from 'evergreen-ui';
 import moment from 'moment';
 import MemoryContext, { actions } from '../../context';
 import { normal_distribution } from '../../helpers/outlier_detection';
+import { outlier_detection } from '../../calculation/src/lib.rs';
 
 export default function MemoryHeapChart() {
     const { store, dispatch } = useContext(MemoryContext);
@@ -76,6 +77,8 @@ export default function MemoryHeapChart() {
 
     const findOutliers = (sequence, url) => {
         let outliers_found = normal_distribution(sequence);
+        // let outliers_found = outlier_detection(JSON.stringify(sequence));
+        // outliers_found = JSON.parse(outliers_found);
         let outliers = '';
         let outliers_array = [];
     
