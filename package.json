@@ -1,6 +1,6 @@
 {
   "name": "memory-leak-detector",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "Automatic Memory Leak Detector for Web Frontend Javascript",
   "main": "index.js",
   "scripts": {
