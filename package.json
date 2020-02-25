@@ -4,13 +4,16 @@
   "description": "Automatic Memory Leak Detector for Web Frontend Javascript",
   "main": "index.js",
   "scripts": {
-    "panel-dev": "rm -rf chrome/devtools/* && parcel src/panel/index.html --public-url ./ --out-dir chrome/devtools",
-    "panel-dev-browser": "rm -rf chrome/devtools/* && parcel src/panel/index.html --out-dir chrome/devtools",
+    "panel-dev": "rm -rf devchrome/devtools/* && parcel src/panel/index.html --public-url ./ --out-dir devchrome/devtools",
+    "panel-dev-browser": "rm -rf devchrome/devtools/* && parcel src/panel/index.html --out-dir devchrome/devtools",
     "panel-build": "rm -rf chrome/devtools/* && parcel build src/panel/index.html --public-url ./ --out-dir chrome/devtools",
-    "popup-dev": "rm -rf chrome/popup/* && parcel src/popup/index.html --public-url ./ --out-dir chrome/popup",
-    "popup-dev-browser": "rm -rf chrome/popup/* && parcel src/popup/index.html --out-dir chrome/popup",
+    "popup-dev": "rm -rf devchrome/popup/* && parcel src/popup/index.html --public-url ./ --out-dir devchrome/popup",
+    "popup-dev-browser": "rm -rf devchrome/popup/* && parcel src/popup/index.html --out-dir devchrome/popup",
     "popup-build": "rm -rf chrome/popup/* && parcel build src/popup/index.html --public-url ./ --out-dir chrome/popup",
-    "build": "npm run panel-build && npm run popup-build"
+    "option-dev": "rm -rf devchrome/option/* && parcel src/option/index.html --out-dir devchrome/option",
+    "option-build": "rm -rf chrome/option/* && parcel build src/option/index.html --public-url ./ --out-dir chrome/option",
+    "build": "npm run panel-build && npm run popup-build && npm run option-build",
+    "anomaly-detection-dev": "node data/anomalyDetection.js"
   },
   "repository": {
     "type": "git",
@@ -24,16 +27,21 @@
   },
   "homepage": ".",
   "devDependencies": {
-    "parcel-bundler": "^1.12.4"
+    "parcel-bundler": "^1.12.4",
+    "typescript": "^3.7.5"
   },
   "dependencies": {
     "@nivo/line": "^0.61.1",
-    "apexcharts": "^3.11.3",
+    "@types/mathjs": "^6.0.3",
+    "apexcharts": "^3.15.2",
     "constate": "^1.3.2",
     "d3-time": "^1.1.0",
-    "evergreen-ui": "^4.21.5",
+    "evergreen-ui": "^4.22.0",
+    "js-prettify": "^1.4.0",
     "lodash": "^4.17.15",
+    "mathjs": "^6.5.0",
     "moment": "^2.24.0",
+    "object-sizeof": "^1.5.2",
     "react": "^16.12.0",
     "react-apexcharts": "^1.3.6",
     "react-dom": "^16.12.0"

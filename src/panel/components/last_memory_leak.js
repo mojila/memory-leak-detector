@@ -13,10 +13,10 @@ export default function LastMemoryLeak(props) {
                         Time
                     </Table.TextHeaderCell>
                     <Table.TextHeaderCell>
-                        Memory Active
+                        Used Heap
                     </Table.TextHeaderCell>
                     <Table.TextHeaderCell>
-                        Memory Heap Size
+                        Total Heap
                     </Table.TextHeaderCell>
                     <Table.TextHeaderCell>
                         Object

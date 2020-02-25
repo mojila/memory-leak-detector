@@ -1,13 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Text, Pane } from 'evergreen-ui';
+import MemoryContext from '../../context';
 
-function SimpleCurrentStats({ usedMemory, totalMemory }) {
-    return (<Pane marginX={8} elevation={1} padding={8} display="flex">
+
+function SimpleCurrentStats(props) {
+    const { store, dispatch } = useContext(MemoryContext);
+
+    return (<Pane marginX={8} elevation={1} padding={8} paddingLeft={16} display="flex"
+        backgroundColor="#f1f1f1">
         <Pane flex={1}>
-            <Text>Current Active: {(usedMemory / 1000000).toFixed(2)} Mb</Text>
+            <Text>Used Heap: {(store.usedHeap / 1000000).toFixed(2)} Mb</Text>
         </Pane>
         <Pane flex={1}>
-            <Text>Heap Size: {(totalMemory / 1000000).toFixed(2)} Mb</Text>
+            <Text>Total Heap: {(store.totalHeap / 1000000).toFixed(2)} Mb</Text>
         </Pane>
     </Pane>);
 };

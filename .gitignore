@@ -3,3 +3,9 @@ node_modules
 dist
 chrome/devtools
 chrome/popup
+chrome/option
+devchrome/devtools
+devchrome/popup
+devchrome/option
+.Rproj.user
+src/calculation/target

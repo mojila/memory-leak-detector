@@ -1,10 +1,7 @@
 import React from 'react';
 import { Button, Pane, Heading, Icon } from 'evergreen-ui';
-import { Context } from '../context';
 
 function Header() {
-    const { activate, active, deactivate } = Context();
-
     return (
         <Pane display="flex" background="tint2" borderRadius={4} padding={14}>
             <Pane flex={1} alignItems="center" display="flex">

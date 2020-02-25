@@ -1,32 +1,31 @@
-import React, { useEffect, useState } from 'react';
-import { Pane } from 'evergreen-ui';
-import MemoryHeapChart from '../../panel/components/memory_heap_chart';
+import React, { useEffect, useState, useContext } from 'react';
+import { Pane, Button } from 'evergreen-ui';
+import MemoryHeapChart from './memory_heap_chart';
 import SimpleCurrentStats from './simple-current-stats';
+import MemoryContext from '../../context';
 
 function Main(props) {
-    const [usedMemory, setUsedMemory] = useState(0);
-    const [totalMemory, setTotalMemory] = useState(0);
+    const { store } = useContext(MemoryContext);
 
-    useEffect(() => {
-        const updateSeries = setInterval(() => {
-            chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-                if ([...tabs].length > 0) {
-                    chrome.tabs.sendMessage(tabs[0].id, {greeting: "hello"}, function(response) {
-                        let { memoryUsed, memoryHeapTotal } = response.farewell;
-                        setUsedMemory(memoryUsed);
-                        setTotalMemory(memoryHeapTotal);
-                    });
-                }
-            });
-        }, 1000);
+    const toDashboard = () => {
+        let url = chrome.runtime.getURL('option/index.html');
 
-        return () => clearInterval(updateSeries);
+        let link = document.createElement("a");
+        link.target = "_blank";
+        link.href = `${url}?hostname=${store.url.hostname}&port=${store.url.port}`;
+        link.click();
+    }
 
-    }, [setTotalMemory, setUsedMemory]);
-
-    return (<Pane>
+    return (<Pane paddingTop={8}>
         <MemoryHeapChart/>
-        <SimpleCurrentStats usedMemory={usedMemory} totalMemory={totalMemory}/>
+        <SimpleCurrentStats/>
+        <Pane marginX={8} marginY={8}>
+            <Pane display="flex" justifyContent="space-between">
+                <Button flex={1} appearance="primary" intent="danger" marginRight={8}>Memory Leak (0)</Button>
+                <Button flex={1} appearance="primary" intent="warning" marginRight={8}>Memory Anomalies ({store.outliers.length})</Button>
+                <Button onClick={toDashboard}>Meleak Dashboard</Button>
+            </Pane>
+        </Pane>
     </Pane>);
 }
 
