@@ -1,5 +1,5 @@
 export default () => {
-  self.addEventListener("message", e => { // eslint-disable-line no-restricted-globals
+  self.addEventListener("message", e => {
     if (!e) return;
 
     postMessage(e.data)

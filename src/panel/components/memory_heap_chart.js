@@ -4,9 +4,12 @@ import { Pane } from 'evergreen-ui';
 import moment from 'moment';
 import MemoryContext, { actions } from '../../context';
 import { normal_distribution } from '../../helpers/outlier_detection';
+import WebWorker from '../../helpers/worker_setup'
+import example from '../../workers/example'
 
 export default function MemoryHeapChart() {
     const { store, dispatch } = useContext(MemoryContext);
+    const find_outlier_worker = new WebWorker(example)
 
     const options = {
           chart: {
@@ -76,11 +79,11 @@ export default function MemoryHeapChart() {
 
     const findOutliers = (sequence, url) => {
         let outliers_found = normal_distribution(sequence);
-        // let outliers_found = outlier_detection(JSON.stringify(sequence));
-        // outliers_found = JSON.parse(outliers_found);
         let outliers = '';
         let outliers_array = [];
     
+        // find_outlier_worker.postMessage(sequence)
+
         if (outliers_found.length > 0) {
             outliers = localStorage.getItem(`outliers-${url.hostname}-${url.port}`);
 
@@ -118,6 +121,10 @@ export default function MemoryHeapChart() {
         }
     }
 
+    const handleWorker = (e) => {
+        console.log(`from worker: ${e.data}`)
+    }
+
     useEffect(() => {
         const updateSeries = setInterval(() => {
             // let usedHeap = performance.memory.usedJSHeapSize;
@@ -137,8 +144,13 @@ export default function MemoryHeapChart() {
             });
         }, 1000);
 
-        return () => clearInterval(updateSeries);
-    }, [dispatch]);
+        find_outlier_worker.addEventListener('message', handleWorker)
+
+        return () => {
+            clearInterval(updateSeries)
+            find_outlier_worker.removeEventListener('message', handleWorker, true)
+        };
+    }, [dispatch, find_outlier_worker]);
     
     return (<Pane>
         <Pane>
