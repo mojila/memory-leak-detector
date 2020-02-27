@@ -3,13 +3,13 @@ import ApexChart from 'react-apexcharts';
 import { Pane } from 'evergreen-ui';
 import moment from 'moment';
 import MemoryContext, { actions } from '../../context';
-import { normal_distribution } from '../../helpers/outlier_detection';
 import WebWorker from '../../helpers/worker_setup'
-import example from '../../workers/example'
+import anomalyDetection from '../../workers/anomaly_detection'
 
 export default function MemoryHeapChart() {
     const { store, dispatch } = useContext(MemoryContext);
-    const find_outlier_worker = new WebWorker(example)
+    const find_outlier_worker = new WebWorker(anomalyDetection)
+    const [url, setUrl] = useState(new URL('http://localhost'))
 
     const options = {
           chart: {
@@ -34,7 +34,7 @@ export default function MemoryHeapChart() {
         }
     };
 
-    const onUpdateSeries = (usedHeap, totalHeap, url) => {
+    const onUpdateSeries = (usedHeap, totalHeap) => {
         let newSeries = store.series;
 
         if (newSeries[0].data.length > 10 && newSeries[1].data.length > 10) {
@@ -51,17 +51,17 @@ export default function MemoryHeapChart() {
 
         ApexCharts.exec('memory-usage', 'updateSeries', newSeries);
 
-        onUpdateStats(newSeries[0].data.slice(-1)[0].y, newSeries[1].data.slice(-1)[0].y, url);
+        onUpdateStats(newSeries[0].data.slice(-1)[0].y, newSeries[1].data.slice(-1)[0].y);
     }
 
-    const onUpdateStats = (usedHeap, totalHeap, url) => {
+    const onUpdateStats = (usedHeap, totalHeap) => {
         dispatch({ type: actions.SET_USED_HEAP, value: usedHeap });
         dispatch({ type: actions.SET_TOTAL_HEAP, value: totalHeap });
 
-        onUpdateMinutes(totalHeap, url);
+        onUpdateMinutes(totalHeap);
     }
 
-    const onUpdateMinutes = (totalHeap, url) => {
+    const onUpdateMinutes = (totalHeap) => {
         let temp = store.minutes;
 
         if (temp[0].data.length > 59) {
@@ -73,16 +73,13 @@ export default function MemoryHeapChart() {
         dispatch({ type: actions.SET_MINUTES, value: temp });
 
         if (temp[0].data.length > 59) {
-            findOutliers(temp[0].data, url);
+            findOutliers(temp[0].data);
         }
     }
 
-    const findOutliers = (sequence, url) => {
-        let outliers_found = normal_distribution(sequence);
+    const saveOutliers = (outliers_found) => {
         let outliers = '';
         let outliers_array = [];
-    
-        // find_outlier_worker.postMessage(sequence)
 
         if (outliers_found.length > 0) {
             outliers = localStorage.getItem(`outliers-${url.hostname}-${url.port}`);
@@ -121,8 +118,12 @@ export default function MemoryHeapChart() {
         }
     }
 
+    const findOutliers = (sequence) => {
+        find_outlier_worker.postMessage(sequence)
+    }
+
     const handleWorker = (e) => {
-        console.log(`from worker: ${e.data}`)
+        saveOutliers(e.data)
     }
 
     useEffect(() => {
@@ -136,9 +137,9 @@ export default function MemoryHeapChart() {
                         let { memoryUsed, memoryHeapTotal } = response.farewell;
                         let usedHeap = { x: moment().toISOString(), y: memoryUsed };
                         let totalHeap = { x: moment().toISOString(), y: memoryHeapTotal };
-                        let url = new URL(tabs[0].url);
+                        setUrl(new URL(tabs[0].url))
 
-                        onUpdateSeries(usedHeap, totalHeap, url);
+                        onUpdateSeries(usedHeap, totalHeap);
                     });
                 }
             });

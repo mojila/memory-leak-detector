@@ -1,5 +1,4 @@
 import { pow, mean, sum, sqrt } from 'mathjs';
-// const { pow, mean, sum, sqrt } = require('mathjs');
 
 function normal_distribution(raw) {
     let sequence = Array.from(raw).map(d => d.value);
@@ -16,6 +15,3 @@ function normal_distribution(raw) {
 }
 
 export { normal_distribution };
-// module.exports = {
-//     normal_distribution
-// }
