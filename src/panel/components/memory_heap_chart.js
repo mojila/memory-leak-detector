@@ -77,7 +77,7 @@ export default function MemoryHeapChart() {
         }
     }
 
-    const saveOutliers = (outliers_found) => {
+    const saveOutliers = (outliers_found, sequence) => {
         let outliers = '';
         let outliers_array = [];
 
@@ -123,7 +123,7 @@ export default function MemoryHeapChart() {
     }
 
     const handleWorker = (e) => {
-        saveOutliers(e.data)
+        saveOutliers(e.data.outliers_found, e.data.sequence)
     }
 
     useEffect(() => {
@@ -134,12 +134,14 @@ export default function MemoryHeapChart() {
             chrome.tabs.query({active: true}, function(tabs) {
                 if (Array.from(tabs).length > 0) {
                     chrome.tabs.sendMessage(tabs[0].id, {greeting: "hello"}, function(response) {
-                        let { memoryUsed, memoryHeapTotal } = response.farewell;
-                        let usedHeap = { x: moment().toISOString(), y: memoryUsed };
-                        let totalHeap = { x: moment().toISOString(), y: memoryHeapTotal };
-                        setUrl(new URL(tabs[0].url))
+                        if (response.farewell) {
+                            let { memoryUsed, memoryHeapTotal } = response.farewell;
+                            let usedHeap = { x: moment().toISOString(), y: memoryUsed };
+                            let totalHeap = { x: moment().toISOString(), y: memoryHeapTotal };
+                            setUrl(new URL(tabs[0].url))
 
-                        onUpdateSeries(usedHeap, totalHeap);
+                            onUpdateSeries(usedHeap, totalHeap);
+                        }
                     });
                 }
             });

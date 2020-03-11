@@ -21,6 +21,6 @@ export default () => {
 
     let results = self.outlier_detection(e.data)
 
-    postMessage(results)
+    postMessage({ outliers_found: results, sequence: e.data })
   });
 };
