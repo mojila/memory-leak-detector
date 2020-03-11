@@ -6,7 +6,7 @@
 
 # Chrome Installation
 
-Open Chrome -> Settings -> Extension -> Load Unpacked -> go to "chrome" directory in project root
+Open Chrome -> Settings -> Extension -> Load Unpacked -> go to project root and choose "chrome" directory
 
 # How to Run
 
