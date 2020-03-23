@@ -1,10 +1,8 @@
 chrome.runtime.onMessage.addListener(
-    function(request, sender, sendResponse) {
-      // console.log(sender.tab ?
-      //             "from a content script:" + sender.tab.url :
-      //             "from the extension");
+    function(request, _sender, sendResponse) {
       let memoryUsed = performance.memory.usedJSHeapSize;
       let memoryHeapTotal = performance.memory.totalJSHeapSize;
-      if (request.greeting == "hello")
-        sendResponse({farewell: { memoryUsed, memoryHeapTotal }});
+      
+      if (request.content == "get_info")
+        sendResponse({memoryInfo: { memoryUsed, memoryHeapTotal }});
     });

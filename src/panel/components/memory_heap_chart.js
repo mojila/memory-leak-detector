@@ -133,9 +133,9 @@ export default function MemoryHeapChart() {
             
             chrome.tabs.query({active: true}, function(tabs) {
                 if (Array.from(tabs).length > 0) {
-                    chrome.tabs.sendMessage(tabs[0].id, {greeting: "hello"}, function(response) {
-                        if (response.farewell) {
-                            let { memoryUsed, memoryHeapTotal } = response.farewell;
+                    chrome.tabs.sendMessage(tabs[0].id, {content: "get_info"}, function(response) {
+                        if (response.memoryInfo) {
+                            let { memoryUsed, memoryHeapTotal } = response.memoryInfo;
                             let usedHeap = { x: moment().toISOString(), y: memoryUsed };
                             let totalHeap = { x: moment().toISOString(), y: memoryHeapTotal };
                             setUrl(new URL(tabs[0].url))
