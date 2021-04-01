@@ -33,7 +33,7 @@
   "dependencies": {
     "@nivo/line": "^0.61.1",
     "@types/mathjs": "^6.0.4",
-    "apexcharts": "^3.17.0",
+    "apexcharts": "^3.24.0",
     "constate": "^2.0.0",
     "d3-time": "^1.1.0",
     "evergreen-ui": "^4.23.3",
