@@ -9,3 +9,4 @@ devchrome/popup
 devchrome/option
 .Rproj.user
 src/calculation/target
+package-lock.json
