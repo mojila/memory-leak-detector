@@ -38,7 +38,7 @@
     "d3-time": "^1.1.0",
     "evergreen-ui": "^4.23.3",
     "js-prettify": "^1.4.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "mathjs": "^6.6.1",
     "moment": "^2.24.0",
     "object-sizeof": "^1.5.3",
